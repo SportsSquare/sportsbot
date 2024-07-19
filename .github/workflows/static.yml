@@ -1,0 +1,155 @@
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Chatbot</title>
+    <style>
+        .chat-container {
+            width: 400px;
+            margin: 50px auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        #chat-box {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            height: 200px;
+            overflow-y: scroll;
+        }
+
+        .chat-box li {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
+        }
+
+        .incoming {
+            background-color: #eee;
+            text-align: left;
+        }
+
+        .outgoing {
+            background-color: #ddd;
+            text-align: right;
+        }
+
+        .chat-input {
+            display: flex;
+        }
+
+        #user-message {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #send-button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <ul id="chat-box">
+            <li class="incoming">Hi there! I'm your sports chatbot. What sport are you interested in today?</li>
+        </ul>
+        <div class="chat-input">
+            <input type="text" id="user-message" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-message');
+        const sendButton = document.getElementById('send-button');
+
+        sendButton.addEventListener('click', () => {
+          const message = userInput.value.trim().toLowerCase();
+
+          if (message) {
+            // Add user message to chat
+            appendMessage(message, 'outgoing');
+            userInput.value = '';
+
+            let response;
+
+            // Simple logic to respond based on user message (replace with actual data fetching)
+            if (message.includes('Who is the current NFL Champion?') {
+              response = "The Kansas City Chiefs.";
+            } else if (message.includes('basketball')) {
+              response = "Awesome! What are you looking for? Scores, news, or stats?";
+            } else if (message.includes('baseball')) {
+              response = "Baseball! Any specific games you're interested in?";
+            } else {
+              response = "Sorry, I don't have information on that sport yet. What else can I help you with?";
+            }
+
+            setTimeout(() => appendMessage(response, 'incoming'), 1000);
+          }
+        });
+
+        function appendMessage(message, type) {
+          const newMessage = document.createElement('li');
+          newMessage.classList.add('chat', type);
+          newMessage.textContent = message;
+          chatBox.appendChild(newMessage);
+          chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+        }
+    </script>
+</body>
+</html>
